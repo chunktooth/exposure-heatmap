@@ -1,27 +1,55 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import ExposureHeatMap from './ExposureHeatMap';
+import mapboxgl from 'mapbox-gl';
+import './App.scss';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-      <ExposureHeatMap />
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+      this.state = {
+        lng: 5,
+        lat: 34,
+        zoom: 2
+      };
+    }
+
+  componentDidMount() {
+    const map = new mapboxgl.Map({
+      container: this.mapContainer,
+      style: 'mapbox://styles/mapbox/dark-v10',
+      center: [this.state.lng, this.state.lat],
+      zoom: this.state.zoom
+    });
+
+    this.storeCoordinates(map);
+  }
+
+  storeCoordinates = (map) => {
+    map.on('move', () => {
+      this.setState({
+        // get center of map coordinates to fixed digits
+      lng: map.getCenter().lng.toFixed(4),
+      lat: map.getCenter().lat.toFixed(4),
+
+        // determin map zoom level to fixed digits
+      zoom: map.getZoom().toFixed(2)
+      });
+    });
+  }
+
+  render() {
+    return (
+      <div className='App'>
+        <div className='sidebarStyle'>
+          Longitude: {this.state.lng} | 
+          Latitude: {this.state.lat} | 
+          Zoom: {this.state.zoom}
+        </div>      
+        <div 
+          ref={el => this.mapContainer = el} 
+          className='mapContainer'/>
+      </div>
+    )
+  }
 }
 
 export default App;

@@ -1,0 +1,32 @@
+.App {
+  font-family: sans-serif;
+  font-size: 0.8em;
+
+  .mapContainer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  canvas.mapboxgl-canvas {
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+
+  .sidebarStyle {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 12px;
+    background-color: #404040;
+    color: #ffffff;
+    z-index: 1 !important;
+    padding: 6px;
+    font-weight: bold;
+  }
+}
