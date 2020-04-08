@@ -1,5 +1,6 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
+import sampleBatchMap from './exposureData/sampleBatchMap.geojson';
 import './App.scss';
 
 class App extends React.Component {
@@ -12,7 +13,7 @@ class App extends React.Component {
       };
     }
 
-  componentDidMount() {
+  async componentDidMount() {
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/dark-v10',
@@ -20,7 +21,7 @@ class App extends React.Component {
       zoom: this.state.zoom
     });
 
-    this.storeCoordinates(map);
+    await this.storeCoordinates(map);
   }
 
   storeCoordinates = (map) => {
@@ -34,8 +35,32 @@ class App extends React.Component {
       zoom: map.getZoom().toFixed(2)
       });
     });
-  }
 
+    map.on('load', () => {
+      map.loadImage(
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', (error, image) => {
+          if (error) throw error;
+          
+            map.addImage('cat', image);
+            map.addSource('point', {
+            'type': 'geojson',
+            'data': sampleBatchMap
+          });
+    
+          map.addLayer({
+            'id': 'points',
+            'type': 'symbol',
+            'source': 'point',
+            'layout': {
+              'icon-image': 'cat',
+              'icon-size': 0.25
+            }
+          })
+        }
+      )
+    });
+  }
+      
   render() {
     return (
       <div className='App'>
