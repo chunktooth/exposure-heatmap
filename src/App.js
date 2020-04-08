@@ -12,8 +12,8 @@ class App extends React.Component {
   constructor() {
     super();
       this.state = {
-        center: [3,40],
-        zoom: [1.5],
+        center: [5.3753, 35],
+        zoom: [1.49],
         style: "mapbox://styles/mapbox/dark-v10"
       }
   } 
