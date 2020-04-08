@@ -16,7 +16,7 @@ class App extends React.Component {
   async componentDidMount() {
     const map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: 'mapbox://styles/mapbox/dark-v10',
+      style: 'mapbox://styles/mapbox/light-v10',
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom
     });
@@ -38,10 +38,10 @@ class App extends React.Component {
 
     map.on('load', () => {
       map.loadImage(
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', (error, image) => {
+        'https://cdn.iconscout.com/icon/premium/png-256-thumb/pug-563422.png', (error, image) => {
           if (error) throw error;
           
-            map.addImage('cat', image);
+            map.addImage('pug', image);
             map.addSource('point', {
             'type': 'geojson',
             'data': sampleBatchMap
@@ -52,7 +52,7 @@ class App extends React.Component {
             'type': 'symbol',
             'source': 'point',
             'layout': {
-              'icon-image': 'cat',
+              'icon-image': 'pug',
               'icon-size': 0.25
             }
           })

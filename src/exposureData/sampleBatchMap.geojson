@@ -4,8 +4,7 @@
       {
          "type":"Feature",
          "properties":{
-            "AddressLine":"1600 Pennsylvania Ave NW, Washington, DC 20500",
-            "icon": "monument"
+            "AddressLine":"1600 Pennsylvania Ave NW, Washington, DC 20500"
          },
          "geometry":{
             "type":"Point",
