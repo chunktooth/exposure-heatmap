@@ -6,9 +6,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
       this.state = {
-        lng: 5,
-        lat: 34,
-        zoom: 2
+        lng: 5.3753,
+        lat: 29.6213,
+        zoom: 1.49
       };
     }
 
