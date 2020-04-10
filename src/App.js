@@ -1,6 +1,5 @@
 /* eslint-disable react/style-prop-object */
 import React from 'react';
-// import mapboxgl from 'mapbox-gl';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import './App.scss';
 
@@ -34,10 +33,14 @@ class App extends React.Component {
           type="symbol" 
           id="marker" 
           layout={{ 'icon-image': 'marker-15' }}>
-            {/* <Feature 
+            <Feature 
               coordinates={
                 [-0.481747846041145, 51.3233379650232]
-              }/> */}
+              }/>
+            <Feature 
+              coordinates={
+                [32, 51]
+              }/>
         </Layer>
       </Map>
     );
