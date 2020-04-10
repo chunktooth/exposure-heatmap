@@ -53,6 +53,7 @@ class App extends React.Component {
     });
   }
 
+  // Layer only valid with id 'point'
   addLayer = (idName) => {
     this.map.addLayer({
       'id': idName,
@@ -66,6 +67,7 @@ class App extends React.Component {
     })
   }
 
+  // Source only valid with id 'point'
   addSource = (idName) => {
     this.map.addSource(idName, {
       'type': 'geojson',
@@ -87,12 +89,14 @@ class App extends React.Component {
 
   onMouseEnterMapPin = () => {
     this.map.on('mouseenter', 'point', (e) => {
+
       // Change the cursor style
       this.map.getCanvas().style.cursor = 'pointer';
        
       let coordinates = e.features[0].geometry.coordinates.slice();
       let addressLine = e.features[0].properties.AddressLine;
-      
+      let content = `<p>${addressLine}</p><strong>${coordinates}</strong>`;
+
       // Ensure that if the map is zoomed out such that multiple
       // Copies of the feature are visible, the popup appears
       // Over the copy being pointed to.
@@ -103,7 +107,7 @@ class App extends React.Component {
       // Populate the popup and set its coordinates from feature
       this.popup
         .setLngLat(coordinates)
-        .setHTML(addressLine)
+        .setHTML(content)
         .addTo(this.map);
     });
 
