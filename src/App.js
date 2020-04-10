@@ -13,51 +13,103 @@ class App extends React.Component {
       };
     }
 
-  async componentDidMount() {
-    const map = new mapboxgl.Map({
+  componentDidMount() {
+    this.configureMapbox();
+    this.storeCoordinates();
+    this.onMapLoad();
+  };
+
+  configureMapbox = () => {
+    this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/light-v10',
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom
     });
 
-    await this.storeCoordinates(map);
+    this.popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+    });
   }
 
-  storeCoordinates = (map) => {
-    map.on('move', () => {
+  storeCoordinates = () => {
+    this.map.on('move', () => {
       this.setState({
-        // get center of map coordinates to fixed digits
-      lng: map.getCenter().lng.toFixed(4),
-      lat: map.getCenter().lat.toFixed(4),
+        // Get center of map coordinates to fixed digits
+        lng: this.map.getCenter().lng.toFixed(4),
+        lat: this.map.getCenter().lat.toFixed(4),
 
-        // determin map zoom level to fixed digits
-      zoom: map.getZoom().toFixed(2)
+        // Determine map zoom level to fixed digits
+        zoom: this.map.getZoom().toFixed(2)
       });
     });
+  }
 
-    map.on('load', () => {
-      map.loadImage(
-        'https://cdn.iconscout.com/icon/premium/png-256-thumb/pug-563422.png', (error, image) => {
-          if (error) throw error;
-          
-            map.addImage('pug', image);
-            map.addSource('point', {
-            'type': 'geojson',
-            'data': sampleBatchMap
-          });
+  onMapLoad = () => {
+    this.map.on('load', () => {
+      this.loadMapPin()
+      this.onMouseEnterMapPin()
+    });
+  }
+
+  addLayer = (idName) => {
+    this.map.addLayer({
+      'id': idName,
+      'type': 'symbol',
+      'source': 'point',
+      'layout': {
+        'icon-image': 'pug',
+        'icon-size': 0.15,
+        'icon-allow-overlap': true
+      },
+    })
+  }
+
+  addSource = (idName) => {
+    this.map.addSource(idName, {
+      'type': 'geojson',
+      'data': sampleBatchMap
+    })
+  };
+
+  loadMapPin = () => {
+    let imagePath = 'https://cdn.iconscout.com/icon/premium/png-256-thumb/pug-563422.png';
     
-          map.addLayer({
-            'id': 'points',
-            'type': 'symbol',
-            'source': 'point',
-            'layout': {
-              'icon-image': 'pug',
-              'icon-size': 0.25
-            }
-          })
-        }
-      )
+    this.map.loadImage(imagePath, (error, image) => {
+      if (error) throw error;
+      
+      this.map.addImage('pug', image);
+      this.addSource('point');  
+      this.addLayer('point');
+    })
+  }
+
+  onMouseEnterMapPin = () => {
+    this.map.on('mouseenter', 'point', (e) => {
+      // Change the cursor style
+      this.map.getCanvas().style.cursor = 'pointer';
+       
+      let coordinates = e.features[0].geometry.coordinates.slice();
+      let addressLine = e.features[0].properties.AddressLine;
+      
+      // Ensure that if the map is zoomed out such that multiple
+      // Copies of the feature are visible, the popup appears
+      // Over the copy being pointed to.
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+       
+      // Populate the popup and set its coordinates from feature
+      this.popup
+        .setLngLat(coordinates)
+        .setHTML(addressLine)
+        .addTo(this.map);
+    });
+
+    this.map.on('mouseleave', 'point', () => {
+      this.map.getCanvas().style.cursor = '';
+      this.popup.remove();
     });
   }
       
