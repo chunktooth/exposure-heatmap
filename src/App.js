@@ -1,11 +1,10 @@
 import React from 'react';
-
 import ReactMapboxGl, { 
   Layer, 
   Feature,
-  // Image 
+  Image,
+  Popup 
 } from 'react-mapbox-gl';
-// import batchGeoJSON from './exposureData/sampleBatchMap.geojson';
 import sampleBatchMap from './exposureData/sampleBatchMap.json';
 import './App.scss';
 
@@ -28,15 +27,24 @@ class App extends React.Component {
     const { exposureMap } = this.state;
 
     return exposureMap.features.map(ft => {
+      let content = ft.properties.AddressLine;
       let coords = ft.geometry.coordinates;
-      // let imagePath = 'https://cdn.iconscout.com/icon/premium/png-256-thumb/pug-563422.png';
+      
       if(coords) {
-        return <Feature coordinates={coords}/>
-        // return <Image 
-        //   id={'exposure'} 
-        //   url={imagePath} 
-        //   data={batchGeoJSON}  
-        // />
+        return <Feature 
+          coordinates={coords}
+          onMouseEnter={(e) => {
+            return <Popup 
+              offset={{
+                'bottom-left': [12, -38],  
+                'bottom': [0, -38], 
+                'bottom-right': [-12, -38]
+              }}
+              anchor="bottom"
+              coordinates={coords}>
+                <p>{coords + content}</p>
+            </Popup>
+          }}/>
       }
 
       return null;
@@ -45,6 +53,7 @@ class App extends React.Component {
 
   render() {
     const { style, zoom, center } = this.state;
+    let imagePath = 'https://cdn.iconscout.com/icon/premium/png-256-thumb/pug-563422.png';
 
     if(this.state.exposureMap)  {
       return (
@@ -56,13 +65,24 @@ class App extends React.Component {
             height: '100vh',
             width: '100vw'
           }}
-          interactive={true}>
+          interactive={true}
+          renderChildrenInPortal={true}>
+
+          <Image 
+            id={'pug'} 
+            url={imagePath}/>
+
           <Layer 
             type="symbol" 
             id="marker" 
-            layout={{ 'icon-image': 'marker-15' }}> 
-            { this.renderFeature() }
+            layout={{ 
+              'icon-image': 'pug', 
+              'icon-size': 0.15
+            }}
+            anchor="bottom"> 
+              { this.renderFeature() }
           </Layer>
+
         </Map>
       );
     }
