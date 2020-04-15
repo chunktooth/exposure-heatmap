@@ -9,11 +9,12 @@ class App extends React.Component {
     this.state = {
       mapboxApiAccessToken: 'pk.eyJ1Ijoib3NhZXRlaG4iLCJhIjoiY2s4a3FraWwyMDRtdTNucW82bGswcXB6biJ9.Ks3reY0Gor-GqRVP9woI8Q',
       viewport: {
-        width: 400,
-        height: 400,
-        latitude: 37.7577,
-        longitude: -122.4376,
-        zoom: 8
+        width: '100vw',
+        height: '100vh',
+        latitude: 5.3753,
+        longitude: 35,
+        zoom: 1.49
+        // style: "mapbox://styles/mapbox/dark-v10",
       }
     }
   }
