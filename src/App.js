@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactMapboxGl, { 
-  Layer, 
+  // Source,
+  // Layer, 
+  // Image,
+  Marker,
   Feature,
-  Image,
   Popup 
 } from 'react-mapbox-gl';
+// import sampleBatchMapGeo from './exposureData/sampleBatchMap.geojson';
 import sampleBatchMap from './exposureData/sampleBatchMap.json';
 import './App.scss';
 
@@ -19,32 +22,113 @@ class App extends React.Component {
       center: [5.3753, 35],
       zoom: [1.49],
       style: "mapbox://styles/mapbox/dark-v10",
-      exposureMap: sampleBatchMap
+      exposureMap: sampleBatchMap,
+      isShowingPopup: false,
+      popupIndex: undefined
     }
   }
 
-  renderFeature = () => {
-    const { exposureMap } = this.state;
+  togglePopup = (idx, popupBool) => {
+    return this.setState({
+      isShowingPopup: popupBool,
+      popupIndex: idx
+    })
+  }
 
-    return exposureMap.features.map(ft => {
+  renderFeature = () => {
+    const { 
+      exposureMap, 
+      isShowingPopup
+    } = this.state;
+
+    exposureMap.features.map((ft, idx) => {
       let content = ft.properties.AddressLine;
       let coords = ft.geometry.coordinates;
       
       if(coords) {
         return <Feature 
           coordinates={coords}
-          onMouseEnter={(e) => {
-            return <Popup 
+          onMouseEnter={(obj) => { 
+            this.togglePopup(idx) 
+          }}
+          onMouseLeave={() => { 
+            this.togglePopup(idx)
+          }}>
+
+          {
+            isShowingPopup
+              && <Popup 
+                style={{
+                  'height': '200px', 
+                  'width': '200px'
+                }}
+                offset={{
+                  'bottom-left': [12, -38],  
+                  'bottom': [0, -38], 
+                  'bottom-right': [-12, -38]
+                }}
+                anchor="bottom"
+                coordinates={coords}>
+                <p>{coords + content}</p>
+            </Popup>
+          }
+        </Feature>      
+      }
+
+      return null;
+    })
+  }
+
+  renderMarker = () => {
+    const { 
+      exposureMap, 
+      isShowingPopup,
+      popupIndex 
+    } = this.state;
+    let imagePath = 'https://cdn.iconscout.com/icon/premium/png-256-thumb/pug-563422.png';
+
+    return exposureMap.features.map((ft, idx) => {
+      let addressLine = ft.properties.AddressLine;
+      let coords = ft.geometry.coordinates;
+
+      if(coords) {
+        return <React.Fragment>
+          <Marker key={idx}
+            coordinates={coords}>
+            <img id={'pug'} 
+              alt="Map pin"
+              style={{
+                'width': '30px',
+                'cursor': 'pointer',
+                'position': 'absolute',
+                'z-index': 0
+              }}
+              src={imagePath}
+              onMouseEnter={() => { this.togglePopup(idx, true) }}
+              onMouseLeave={() => { this.togglePopup(idx, false) }}/>
+          </Marker>
+
+          {
+            isShowingPopup 
+              && (idx === popupIndex) 
+              && <Popup 
+              style={{
+                'position': 'absolute',
+                'z-index': 100,
+                'text-align': 'center'
+              }}
               offset={{
-                'bottom-left': [12, -38],  
-                'bottom': [0, -38], 
-                'bottom-right': [-12, -38]
+                'bottom-left': [12, -15],  
+                'bottom': [0, -5], 
+                'bottom-right': [-12 -15]
               }}
               anchor="bottom"
               coordinates={coords}>
-                <p>{coords + content}</p>
+               <strong>{addressLine}</strong>
+               <p>{coords}</p>
             </Popup>
-          }}/>
+          }
+        </React.Fragment>
       }
 
       return null;
@@ -53,7 +137,7 @@ class App extends React.Component {
 
   render() {
     const { style, zoom, center } = this.state;
-    let imagePath = 'https://cdn.iconscout.com/icon/premium/png-256-thumb/pug-563422.png';
+    // let imagePath = 'https://cdn.iconscout.com/icon/premium/png-256-thumb/pug-563422.png';
 
     if(this.state.exposureMap)  {
       return (
@@ -67,12 +151,18 @@ class App extends React.Component {
           }}
           interactive={true}
           renderChildrenInPortal={true}>
+          
+          {/* <Source id='exposureData'
+            type="geojson"
+            cluster={true}
+            clusterMaxZoom={14}
+            clusterRadius={50} /> */}
 
-          <Image 
+          {/* <Image 
             id={'pug'} 
-            url={imagePath}/>
+            url={imagePath}/> */}
 
-          <Layer 
+          {/* <Layer 
             type="symbol" 
             id="marker" 
             layout={{ 
@@ -81,10 +171,11 @@ class App extends React.Component {
             }}
             anchor="bottom"> 
               { this.renderFeature() }
-          </Layer>
+          </Layer> */}
 
+          { this.renderMarker() }
         </Map>
-      );
+      )
     }
   }
 }
