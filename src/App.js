@@ -13,8 +13,8 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      center: [51.505, -0.09],
-      zoom: 4,
+      center: [5.3753, 35],
+      zoom: [2.30],
       popupInfo: undefined
     }
   }
