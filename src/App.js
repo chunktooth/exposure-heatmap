@@ -1,54 +1,74 @@
 import React from 'react';
-import sampleBatchMap from './sampleData/sampleBatchMap.geojson';
+import sampleBatchMap from './sampleData/sampleBatchMap.json';
 import { 
   Map as LeafletMap,
+  TileLayer,
   Marker,
-  Popup,
-  GeoJSON
+  Popup
 } from 'react-leaflet';
+import './App.css';
+
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       center: [51.505, -0.09],
-      zoom: 4
+      zoom: 4,
+      popupInfo: undefined
     }
   }
 
-  onViewPortChanged = (viewport) => {
-    return this.setState({ viewport })
+  setPopupInfo = (exposure) => {
+    return this.setState({ popupInfo: exposure })
   }
 
   render() {
-    const { center, zoom } = this.state;
-    const basemap = `https://a.tile.openstreetmap.org/${zoom}/${400}/${400}.png`;
+    const { center, zoom, popupInfo } = this.state;
+    const basemap = `http://{s}.tile.osm.org/{z}/{x}/{y}.png`;
+    const attribution = `&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors`;
 
     return (
       <LeafletMap 
         center={center} 
         zoom={zoom}
-        // style={}
-        // fitBounds={}
+        attributionControl={true}
         doubleClickZoom={true}
-        dragging={true}
-        // viewport={viewport}
-        // onViewportChange={this.onViewPortChanged}
-        >
-        <GeoJSON
-          data={sampleBatchMap}
-          style={() => ({
-            color: '#4a83ec',
-            weight: 0.5,
-            fillColor: "#1a1d62",
-            fillOpacity: 1,
-          })}
-        />
-        <Marker position={[50, 10]}>
-          <Popup>
-            Popup for any custom information.
-          </Popup>
-        </Marker>
+        scrollWheelZoom={true}
+        dragging={true}>
+
+        <TileLayer
+          url={basemap}
+          attribution={attribution}/>
+
+        {
+          sampleBatchMap && sampleBatchMap.features.map(exp => (
+            <Marker
+              key={exp.properties.AddressLine}
+              position={[
+                exp.geometry.coordinates[1],
+                exp.geometry.coordinates[0]
+              ]}
+              onClick={() => {
+                this.setPopupInfo(exp);
+              }}>
+
+              {
+                popupInfo &&
+                <Popup>
+                  <p>
+                    <strong>{ popupInfo.properties.AddressLine }</strong><br/>
+                    { popupInfo.geometry.coordinates }
+                  </p>
+                
+                
+                </Popup>
+              }
+
+            </Marker>
+          ))
+        }
+
       </LeafletMap>
     );
   }
