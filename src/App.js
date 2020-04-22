@@ -49,12 +49,12 @@ class App extends React.Component {
     const attribution = `&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors`;
 
     const icon1 = new Icon({
-      iconUrl: 'https://cdn.iconscout.com/icon/premium/png-256-thumb/pug-563422.png',
+      iconUrl: 'https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-and-shapes-6/177800/262-512.png',
       iconSize: [25, 25]
     });
     const icon2 = new Icon({
-      iconUrl: 'https://cdn.iconscout.com/icon/premium/png-512-thumb/pet-food-1-536294.png',
-      iconSize: [35, 35]
+      iconUrl: 'https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-and-shapes-6/177800/263-512.png',
+      iconSize: [25, 25]
     });
 
     // works
@@ -100,7 +100,6 @@ class App extends React.Component {
             ];
 
             return <React.Fragment>
-
               <Marker
                 icon={icon1}
                 key={exp.properties.AddressLine}
@@ -113,40 +112,39 @@ class App extends React.Component {
                 }}>
 
                 <Polyline 
-                  positions={polyline} 
-                  color='red' />
+                    positions={polyline} 
+                    color='red' />
 
-              {
-                popupInfo &&
-                <Popup>
-                  <strong>{ popupInfo.properties.AddressLine }</strong>
-                  <p>{` ${exposure[0]}, ${exposure[1]} `}</p>
-                </Popup>  
-              }
-            </Marker>
+                {
+                  popupInfo &&
+                  <Popup>
+                    <strong>{ popupInfo.properties.AddressLine }</strong>
+                    <p>{` ${exposure[0]}, ${exposure[1]} `}</p>
+                  </Popup>  
+                }
+              </Marker>
+          
+              <Marker
+                  icon={icon2}
+                  key={exp.properties.AddressLine}
+                  position={[
+                    // sampleBatchData json file coordinates are lng first then lat
+                    exp.properties.falseCoordinates[1],
+                    exp.properties.falseCoordinates[0]
+                  ]}
+                  onClick={() => { 
+                    this.setPopupInfo(exp) 
+                  }}>
 
-            <Marker
-                icon={icon2}
-                key={exp.properties.AddressLine}
-                position={[
-                  exp.properties.falseCoordinates[1],
-                  exp.properties.falseCoordinates[0]
-                ]}
-                onClick={() => { 
-                  this.setPopupInfo(exp) 
-                }}>
-
-              {
-                popupInfo &&
-                <Popup>
-                  <strong>{`Displacement Value ${displacementVal} m`}</strong>
-                  <p></p>
-                  <p>{`${falseExposure[0]}, ${falseExposure[1]} `}</p>
-                </Popup>  
-              }
-
-            </Marker>
-
+                {
+                  popupInfo &&
+                  <Popup>
+                    <strong>{`Displacement Value ${displacementVal} m`}</strong>
+                    <p></p>
+                    <p>{`${falseExposure[0]}, ${falseExposure[1]} `}</p>
+                  </Popup>  
+                }
+              </Marker>
             </React.Fragment>
           })
         }
