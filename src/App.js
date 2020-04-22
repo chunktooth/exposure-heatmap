@@ -4,8 +4,8 @@ import exposureData from './sampleData/sampleBatchMap.json';
 import ReactMapGL, { 
   Source, 
   Layer, 
-  // Marker, 
-  // Popup 
+  Marker, 
+  Popup 
 } from 'react-map-gl';
 import { token } from './sampleData/token';
 
@@ -124,7 +124,7 @@ class App extends React.Component {
         mapStyle='mapbox://styles/mapbox/dark-v10'
         mapboxApiAccessToken={this.state.mapboxApiAccessToken}>
         
-        { this.displayMarker() }
+        {/* { this.displayMarker() } */}
         <Source
           type="geojson"
           data={sampleBatchMap}
