@@ -312,15 +312,15 @@
       "properties":{
          "AddressLine":"24 Sussex Dr, Ottawa, ON K1M 1M4, Canada",
          "falseCoordinates":[
-          45.444609,
-          -75.813867
+           -75.813867,
+           45.444609
        ]
       },
       "geometry":{
          "type":"Point",
          "coordinates":[
-            45.444609,
-            -75.693867
+           -75.693867,
+           45.444609
          ]
       }
    }

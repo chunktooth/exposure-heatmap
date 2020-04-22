@@ -28,6 +28,20 @@ class App extends React.Component {
     return this.setState({ popupInfo: exposure })
   }
 
+  calculateDisplacementValue = (lat1, lon1, lat2, lon2) => {
+      // generally used geo measurement function
+      let R = 6378.137; // Earth radius in KM
+      let dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+      let dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+      let a = Math.sin(dLat/2) * Math.sin(dLat/2) 
+        + Math.cos(lat1 * Math.PI / 180) 
+        * Math.cos(lat2 * Math.PI / 180) 
+        * Math.sin(dLon/2) * Math.sin(dLon/2);
+      let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      let d = R * c;
+      return d * 1000; // To meters
+  }
+
   render() {
     const { center, zoom, popupInfo } = this.state;
 
@@ -41,7 +55,7 @@ class App extends React.Component {
     const icon2 = new Icon({
       iconUrl: 'https://cdn.iconscout.com/icon/premium/png-512-thumb/pet-food-1-536294.png',
       iconSize: [35, 35]
-    })
+    });
 
     // works
     // const polyline = [
@@ -75,13 +89,18 @@ class App extends React.Component {
               exp.properties.falseCoordinates[0]
             ];
 
+            let displacementVal  = this.calculateDisplacementValue(
+              exposure[0], exposure[1], 
+              falseExposure[0], falseExposure[1]
+            ).toFixed();
+
             const polyline = [ 
               exposure,
               falseExposure
-              // [ 38.898342, -77.016488 ]
             ];
 
             return <React.Fragment>
+
               <Marker
                 icon={icon1}
                 key={exp.properties.AddressLine}
@@ -93,9 +112,9 @@ class App extends React.Component {
                   this.setPopupInfo(exp) 
                 }}>
 
-              <Polyline 
-                positions={polyline} 
-                color='red' />
+                <Polyline 
+                  positions={polyline} 
+                  color='red' />
 
               {
                 popupInfo &&
@@ -116,7 +135,18 @@ class App extends React.Component {
                 onClick={() => { 
                   this.setPopupInfo(exp) 
                 }}>
+
+              {
+                popupInfo &&
+                <Popup>
+                  <strong>{`Displacement Value ${displacementVal} m`}</strong>
+                  <p></p>
+                  <p>{`${falseExposure[0]}, ${falseExposure[1]} `}</p>
+                </Popup>  
+              }
+
             </Marker>
+
             </React.Fragment>
           })
         }
