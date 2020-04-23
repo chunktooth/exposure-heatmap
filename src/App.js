@@ -4,10 +4,11 @@ import {
   Map as LeafletMap,
   TileLayer,
   Marker,
+  CircleMarker,
   Popup,
   Polyline
 } from 'react-leaflet';
-import { Icon } from 'leaflet';
+import { Icon, Circle } from 'leaflet';
 import './App.css';
 
 class App extends React.Component {
@@ -16,10 +17,6 @@ class App extends React.Component {
     this.state = {
       center: [5.3753, 35],
       zoom: [3],
-      // bounds: [
-      //   [27.693538, -167.402592],
-      //   [27.693538, 175.546622]
-      // ],
       popupInfo: undefined
     }
   }
@@ -42,32 +39,76 @@ class App extends React.Component {
       return d * 1000; // To meters
   }
 
-  render() {
-    const { center, zoom, popupInfo } = this.state;
+  calculateMidPoint = (lat1, lon1, lat2, lon2) => {
+    return {
+      lat: (lat1 + lat2) / 2,
+      lon: (lon1 + lon2) / 2
+    }
+  }
 
-    const basemap = `http://{s}.tile.osm.org/{z}/{x}/{y}.png`;
-    const attribution = `&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors`;
+  renderMarkers = (exp, exposure, falseCoords, displacementVal, polyline) => {
+    const { popupInfo } = this.state;
 
     const icon1 = new Icon({
       iconUrl: 'https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-and-shapes-6/177800/262-512.png',
-      iconSize: [25, 25]
+      iconSize: [15, 15]
     });
     const icon2 = new Icon({
       iconUrl: 'https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-and-shapes-6/177800/263-512.png',
-      iconSize: [25, 25]
+      iconSize: [15, 15]
     });
 
-    // works
-    // const polyline = [
-    //   [ 38.897959, -77.036514 ],
-    //   [ 38.898342, -77.016488 ]
-    // ];
+    return <React.Fragment>
+      <Marker
+        icon={icon1}
+        key={exp.properties.AddressLine}
+        position={exposure}
+        onClick={() => { 
+          this.setPopupInfo(exp) 
+        }}>
+
+        <Polyline 
+          positions={polyline} 
+          color='red' />
+
+        {
+          popupInfo &&
+          <Popup>
+            <strong>{ popupInfo.properties.AddressLine }</strong>
+            <p>{` ${exposure[0]}, ${exposure[1]} `}</p>
+          </Popup>  
+        }
+      </Marker>
+          
+      <Marker
+        icon={icon2}
+        key={exp.properties.AddressLine}
+        position={falseCoords}
+        onClick={() => { 
+          this.setPopupInfo(exp) 
+        }}>
+
+        {
+          popupInfo &&
+          <Popup>
+            <strong>{`Displacement Value ${displacementVal} m`}</strong>
+            <p>{`${falseCoords[0]}, ${falseCoords[1]} `}</p>
+          </Popup>  
+        }
+      </Marker>
+    </React.Fragment>
+  }
+
+  render() {
+    const { center, zoom } = this.state;
+
+    const basemap = `http://{s}.tile.osm.org/{z}/{x}/{y}.png`;
+    const attribution = `&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors`;
     
     return (
       <LeafletMap 
         center={center} 
         zoom={zoom}
-        // bounds={bounds}
         attributionControl={true}
         doubleClickZoom={true}
         scrollWheelZoom={true}
@@ -78,74 +119,40 @@ class App extends React.Component {
           attribution={attribution}/>
 
         {
-          sampleBatchMap && sampleBatchMap.features.map(exp => {
+          sampleBatchMap && sampleBatchMap.features.map((exp, idx) => {
             let exposure = [
               exp.geometry.coordinates[1],
               exp.geometry.coordinates[0]
             ];
 
-            let falseExposure = [
-              exp.properties.falseCoordinates[1],
-              exp.properties.falseCoordinates[0]
+            let falseCoords = [
+              exp.geometry.coordinates[1] - 0.00013,
+              exp.geometry.coordinates[0]
             ];
 
             let displacementVal  = this.calculateDisplacementValue(
               exposure[0], exposure[1], 
-              falseExposure[0], falseExposure[1]
+              falseCoords[0], falseCoords[1]
             ).toFixed();
+
+            let midPoint = this.calculateMidPoint(
+              exposure[0], exposure[1], 
+              falseCoords[0], falseCoords[1]
+            );
 
             const polyline = [ 
               exposure,
-              falseExposure
+              falseCoords
             ];
 
-            return <React.Fragment>
-              <Marker
-                icon={icon1}
-                key={exp.properties.AddressLine}
-                position={[
-                  exp.geometry.coordinates[1],
-                  exp.geometry.coordinates[0]
-                ]}
-                onClick={() => { 
-                  this.setPopupInfo(exp) 
-                }}>
-
-                <Polyline 
-                    positions={polyline} 
-                    color='red' />
-
-                {
-                  popupInfo &&
-                  <Popup>
-                    <strong>{ popupInfo.properties.AddressLine }</strong>
-                    <p>{` ${exposure[0]}, ${exposure[1]} `}</p>
-                  </Popup>  
-                }
-              </Marker>
-          
-              <Marker
-                  icon={icon2}
-                  key={exp.properties.AddressLine}
-                  position={[
-                    // sampleBatchData json file coordinates are lng first then lat
-                    exp.properties.falseCoordinates[1],
-                    exp.properties.falseCoordinates[0]
-                  ]}
-                  onClick={() => { 
-                    this.setPopupInfo(exp) 
-                  }}>
-
-                {
-                  popupInfo &&
-                  <Popup>
-                    <strong>{`Displacement Value ${displacementVal} m`}</strong>
-                    <p></p>
-                    <p>{`${falseExposure[0]}, ${falseExposure[1]} `}</p>
-                  </Popup>  
-                }
-              </Marker>
-            </React.Fragment>
+            return <CircleMarker
+              key={idx}
+              center={[midPoint.lat, midPoint.lon]}
+              radius={(displacementVal/2) * 8}
+              fillOpacity={0.5}
+              stroke={false}>
+              { this.renderMarkers(exp, exposure, falseCoords, displacementVal, polyline) }
+            </CircleMarker>
           })
         }
 

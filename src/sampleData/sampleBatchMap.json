@@ -4,15 +4,11 @@
       {
           "type":"Feature",
           "properties":{
-            "AddressLine":"1600 Pennsylvania Ave NW, Washington, DC 20500",
-            "falseCoordinates": [ 
-              -77.016488, 
-              38.898342 
-            ]
+            "AddressLine":"1600 Pennsylvania Ave NW, Washington, DC 20500"
           },
           "geometry":{
             "type":"Point",
-            "coordinates":[
+            "coordinates": [
                 -77.036514,
                 38.897959
             ]
@@ -21,11 +17,7 @@
       {
           "type":"Feature",
           "properties":{
-            "AddressLine":"Westminster, London SW1A 0AA, UK",
-            "falseCoordinates": [ 
-              -0.124809, 
-              51.39968 
-            ]
+            "AddressLine":"Westminster, London SW1A 0AA, UK"
           },
           "geometry":{
             "type":"Point",
@@ -38,11 +30,7 @@
       {
           "type":"Feature",
           "properties":{
-            "AddressLine":"55 Rue du Faubourg Saint-Honoré, 75008 Paris, France",
-            "falseCoordinates": [ 
-              2.316743,
-              48.860613 
-            ]
+            "AddressLine":"55 Rue du Faubourg Saint-Honoré, 75008 Paris, France"
           },
           "geometry":{
             "type":"Point",
@@ -55,11 +43,7 @@
       {
           "type":"Feature",
           "properties":{
-            "AddressLine":"Gazi Mahallesi, Cumhurbaşkanlığı Blv, 06560 Yenimahalle/Ankara, Turkey",
-            "falseCoordinates": [ 
-              32.797868,
-              39.9208
-            ]
+            "AddressLine":"Gazi Mahallesi, Cumhurbaşkanlığı Blv, 06560 Yenimahalle/Ankara, Turkey"
           },
           "geometry":{
             "type":"Point",
@@ -72,11 +56,7 @@
       {
         "type":"Feature",
         "properties":{
-          "AddressLine":"Hradčany, 119 08 Prague 1, Czechia",
-          "falseCoordinates": [ 
-            14.401563,
-            50.101317
-          ]
+          "AddressLine":"Hradčany, 119 08 Prague 1, Czechia"
         },
         "geometry":{
           "type":"Point",
@@ -89,11 +69,7 @@
       {
         "type":"Feature",
         "properties":{
-          "AddressLine":"Európa Tanács Információs és Dokumentációs Központ, Budapest, Kossuth Lajos tér 1-3, 1055 Hungary",
-          "falseCoordinates": [ 
-            19.045643,
-            47.517
-          ]
+          "AddressLine":"Európa Tanács Információs és Dokumentációs Központ, Budapest, Kossuth Lajos tér 1-3, 1055 Hungary"
         },
         "geometry":{
           "type":"Point",
@@ -106,11 +82,7 @@
     {
       "type":"Feature",
       "properties":{
-        "AddressLine":"Spreeweg 1, 10557 Berlin, Germany",
-        "falseCoordinates": [ 
-          13.352793,
-          52.61
-        ]
+        "AddressLine":"Spreeweg 1, 10557 Berlin, Germany"
       },
       "geometry":{
         "type":"Point",
@@ -123,11 +95,7 @@
       {
         "type":"Feature",
         "properties":{
-          "AddressLine":"Av. Maipú 2001, B1636AAA Olivos, Buenos Aires, Argentina",
-          "falseCoordinates": [ 
-            -58.484258,
-            -34.525
-          ]
+          "AddressLine":"Av. Maipú 2001, B1636AAA Olivos, Buenos Aires, Argentina"
         },
         "geometry":{
           "type":"Point",
@@ -140,11 +108,7 @@
     {
       "type":"Feature",
       "properties":{
-        "AddressLine":"Calle Parque Lira S/N, Bosque de Chapultepec I Secc, 11850 Ciudad de México, CDMX, Mexico",
-        "falseCoordinates": [ 
-          -99.191295,
-          19.42
-        ]
+        "AddressLine":"Calle Parque Lira S/N, Bosque de Chapultepec I Secc, 11850 Ciudad de México, CDMX, Mexico"
       },
       "geometry":{
         "type":"Point",
@@ -157,11 +121,7 @@
     {
       "type":"Feature",
       "properties":{
-        "AddressLine":"Rashtrapati Bhawan, President's Estate, New Delhi, Delhi 110004, India",
-        "falseCoordinates": [ 
-          77.199409,
-          28.60463
-        ]
+        "AddressLine":"Rashtrapati Bhawan, President's Estate, New Delhi, Delhi 110004, India"
       },
       "geometry":{
         "type":"Point",
@@ -174,11 +134,7 @@
     {
       "type":"Feature",
       "properties":{
-        "AddressLine":"Московский Кремль, Central Administrative Okrug, Moscow, Russia",
-        "falseCoordinates": [
-          37.617478,
-          55.742216
-        ]
+        "AddressLine":"Московский Кремль, Central Administrative Okrug, Moscow, Russia"
       },
       "geometry":{
         "type":"Point",
@@ -191,11 +147,7 @@
     {
       "type":"Feature",
       "properties":{
-         "AddressLine":"〒100-8111 東京都千代田区千代田１−1",
-         "falseCoordinates":[
-           139.6328,
-           35.685463
-       ]
+         "AddressLine":"〒100-8111 東京都千代田区千代田１−1"
       },
       "geometry":{
          "type":"Point",
@@ -208,11 +160,7 @@
    {
       "type":"Feature",
       "properties":{
-         "AddressLine":"Piazza del Quirinale, 00187 Roma RM, Italy",
-         "falseCoordinates":[
-           12.367013,
-           41.89988
-       ]
+         "AddressLine":"Piazza del Quirinale, 00187 Roma RM, Italy"
       },
       "geometry":{
          "type":"Point",
@@ -225,11 +173,7 @@
    {
       "type":"Feature",
       "properties":{
-         "AddressLine":"서울특별시 종로구 세종로 1",
-         "falseCoordinates":[
-           126.854725,
-           37.586888
-       ]
+         "AddressLine":"서울특별시 종로구 세종로 1"
       },
       "geometry":{
          "type":"Point",
@@ -242,11 +186,7 @@
    {
       "type":"Feature",
       "properties":{
-         "AddressLine":"Palacio da Alvorada - Brasília, DF, 70150-000, Brazil",
-         "falseCoordinates":[
-           -47.942856,
-           -15.792182
-       ]
+         "AddressLine":"Palacio da Alvorada - Brasília, DF, 70150-000, Brazil"
       },
       "geometry":{
          "type":"Point",
@@ -259,11 +199,7 @@
    {
       "type":"Feature",
       "properties":{
-         "AddressLine":"3, Jl. Medan Merdeka Utara No.RT. 02, Gambir, Daerah Khusus Ibukota Jakarta 10110, Indonesia",
-         "falseCoordinates":[
-           106.70414199999999,
-           -6.169824
-       ]
+         "AddressLine":"3, Jl. Medan Merdeka Utara No.RT. 02, Gambir, Daerah Khusus Ibukota Jakarta 10110, Indonesia"
       },
       "geometry":{
          "type":"Point",
@@ -276,11 +212,7 @@
    {
       "type":"Feature",
       "properties":{
-         "AddressLine":"Bryntirion, Pretoria, 0083, South Africa",
-         "falseCoordinates":[
-           28.106721,
-           -25.737577
-       ]
+         "AddressLine":"Bryntirion, Pretoria, 0083, South Africa"
       },
       "geometry":{
          "type":"Point",
@@ -293,11 +225,7 @@
    {
       "type":"Feature",
       "properties":{
-         "AddressLine":"109 Kirribilli Ave, Kirribilli NSW 2061, Australia",
-         "falseCoordinates":[
-           151.099208,
-           -33.851038
-       ]
+         "AddressLine":"109 Kirribilli Ave, Kirribilli NSW 2061, Australia"
       },
       "geometry":{
          "type":"Point",
@@ -310,11 +238,7 @@
    {
       "type":"Feature",
       "properties":{
-         "AddressLine":"24 Sussex Dr, Ottawa, ON K1M 1M4, Canada",
-         "falseCoordinates":[
-           -75.813867,
-           45.444609
-       ]
+         "AddressLine":"24 Sussex Dr, Ottawa, ON K1M 1M4, Canada"
       },
       "geometry":{
          "type":"Point",
