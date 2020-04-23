@@ -8,7 +8,7 @@ import {
   Popup,
   Polyline
 } from 'react-leaflet';
-import { Icon, Circle } from 'leaflet';
+import { Icon } from 'leaflet';
 import './App.css';
 
 class App extends React.Component {
