@@ -1,6 +1,6 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
-import sampleBatchMap from './exposureData/sampleBatchMap.geojson';
+import sampleBatchMap from './sampleData/sampleBatchMap.geojson';
 import './App.scss';
 
 class App extends React.Component {
@@ -97,9 +97,8 @@ class App extends React.Component {
       let addressLine = e.features[0].properties.AddressLine;
       let content = `<p>${addressLine}</p><strong>${coordinates}</strong>`;
 
-      // Ensure that if the map is zoomed out such that multiple
-      // Copies of the feature are visible, the popup appears
-      // Over the copy being pointed to.
+      // On map zooms out, ensure multiple copies of the feature are visible
+      // The popup appears over the copy being pointed to.
       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
