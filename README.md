@@ -3,9 +3,13 @@ Sandbox for creating geospatial map
 
 ## Branches
 This repo is split into 4 branches listed in the following, each branch with its own library implementations.
+
 `mapbox-gl` https://docs.mapbox.com/mapbox-gl-js/overview/
+
 `react-mapbox-gl` https://github.com/alex3165/react-mapbox-gl/blob/master/docs/API.md
+
 `uber-map-gl` https://github.com/visgl/react-map-gl
+
 `leaflet-mapbox`https://react-leaflet.js.org/en/
 
 ## Available Scripts
