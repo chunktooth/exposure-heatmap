@@ -1,8 +1,12 @@
 # exposure-heatmap
 Sandbox for creating geospatial map
 
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Branches
+This repo is split into 4 branches listed in the following, each branch with its own library implementations.
+`mapbox-gl` https://docs.mapbox.com/mapbox-gl-js/overview/
+`react-mapbox-gl` https://github.com/alex3165/react-mapbox-gl/blob/master/docs/API.md
+`uber-map-gl` https://github.com/visgl/react-map-gl
+`leaflet-mapbox`https://react-leaflet.js.org/en/
 
 ## Available Scripts
 
@@ -70,3 +74,5 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `yarn build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
