@@ -9,14 +9,15 @@ class App extends React.Component {
       this.state = {
         lng: 5.3753,
         lat: 29.6213,
-        zoom: 1.49
+        zoom: 1.49,
+        sourceName: undefined
       };
     }
 
   componentDidMount() {
     this.configureMapbox();
     this.storeCoordinates();
-    this.onMapLoad();
+    this.onLoadMap();
   };
 
   configureMapbox = () => {
@@ -46,61 +47,134 @@ class App extends React.Component {
     });
   }
 
-  onMapLoad = () => {
+  onLoadMap = () => {
     this.map.on('load', () => {
-      this.loadMapPin()
-      this.onMouseEnterMapPin()
+      this.onLoadImage();
+      this.onMouseEnterMapPin();
+      this.onAddSource();  
     });
   }
 
-  // Layer only valid with id 'point'
-  addLayer = (idName) => {
+  onAddSource = () => {
+    this.setState({ sourceName: 'exposureData' });
+    this.map.addSource('exposureData', {
+      'type': 'geojson',
+      'data': sampleBatchMap
+    })
+
+    // this.map.addSource('exposureData', {
+    //   'type': 'geojson',
+    //   'data': {
+    //     "type":"FeatureCollection",
+    //     "features":[
+    //       {
+    //         "type":"Feature",
+    //         "properties": {
+    //            "AddressLine":"1600 Pennsylvania Ave NW, Washington, DC 20500",
+    //            "icon": "blueIcon"
+    //         },
+    //         "geometry":{
+    //            "type":"Point",
+    //            "coordinates": [
+    //               -77.036514,
+    //               38.897959
+    //            ]
+    //         }
+    //      },
+    //      {
+    //       "type":"Feature",
+    //       "properties": {
+    //          "AddressLine":"160 Pennsylvania Ave NW, Washington, DC 20500",
+    //          "icon": "blueIcon"
+    //       },
+    //       "geometry":{
+    //          "type":"Point",
+    //          "coordinates": [
+    //             -77.036514,
+    //             38.897939
+    //          ]
+    //       }
+    //       }
+    //     ]
+    //   }
+    // });
+
+  };
+
+  onAddLayer = (layerId) => {
+    // this.map.addLayer({
+    //   'id': layerId,
+    //   'type': 'circle',
+    //   // source name must match `sourceName provided .addSource()
+    //   'source': this.state.sourceName,
+    //   'paint': {
+    //     // make circles larger as the user zooms from z12 to z22
+    //     'circle-radius': {
+    //       'base': 1.75,
+    //       'stops': [[12, 2], [22, 180]]
+    //     },
+    //     // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
+    //     'circle-color': [
+    //       'match', ['get', 'id'],
+    //       'coordinates', '#fbb03b',
+    //       'falseCoordinates', '#223b53'
+    //     ]
+    //   }
+    // })
+
     this.map.addLayer({
-      'id': idName,
+      'id': layerId,
       'type': 'symbol',
-      'source': 'point',
+      // source must match `sourceName` provide on .addSource()
+      'source': this.state.sourceName,
       'layout': {
-        'icon-image': 'pug',
-        'icon-size': 0.15,
+        // icon-image must match name given to .loadImage()
+        'icon-image': 'blueIcon',
+        // 'icon-size': 0.15,
+        'icon-size': 0.02,
         'icon-allow-overlap': true
       },
     })
   }
 
-  // Source only valid with id 'point'
-  addSource = (idName) => {
-    this.map.addSource(idName, {
-      'type': 'geojson',
-      'data': sampleBatchMap
-    })
-  };
+  onLoadImage = () => {
+    // let imagePath = 'https://cdn.iconscout.com/icon/premium/png-256-thumb/pug-563422.png';
 
-  loadMapPin = () => {
-    let imagePath = 'https://cdn.iconscout.com/icon/premium/png-256-thumb/pug-563422.png';
+    let blueIcon = 'https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-and-shapes-6/177800/262-512.png';
+    let redIcon = 'https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-and-shapes-6/177800/263-512.png';
     
-    this.map.loadImage(imagePath, (error, image) => {
+    this.map.loadImage(blueIcon, (error, image) => {
       if (error) throw error;
       
-      this.map.addImage('pug', image);
-      this.addSource('point');  
-      this.addLayer('point');
-    })
+      // 1st argument must mactch name given to .loadImage()
+      this.map.addImage('blueIcon', image);
+      this.onAddLayer('coordinates');
+    });
+
+    this.map.loadImage(redIcon, (error, image) => {
+      if (error) throw error;
+
+      this.map.addImage('redIcon', image);
+      this.onAddLayer('coordinates');
+    });
   }
 
   onMouseEnterMapPin = () => {
-    this.map.on('mouseenter', 'point', (e) => {
-
+    // 2nd argument must match layerId- given to .addLayer()
+    this.map.on('mouseenter', 'coordinates', (e) => {
       // Change the cursor style
       this.map.getCanvas().style.cursor = 'pointer';
        
-      let coordinates = e.features[0].geometry.coordinates.slice();
+      let coordinates = e.features[0].geometry.coordinates;
       let addressLine = e.features[0].properties.AddressLine;
-      let content = `<p>${addressLine}</p><strong>${coordinates}</strong>`;
+      let content = `<strong>${addressLine}</strong>
+      <p>${coordinates[1]}, ${coordinates[0]}</p>`;
 
       // On map zooms out, ensure multiple copies of the feature are visible
       // The popup appears over the copy being pointed to.
       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        coordinates[0] += e.lngLat.lng > coordinates[0] 
+        ? 360 : -360;
       }
        
       // Populate the popup and set its coordinates from feature
@@ -110,7 +184,7 @@ class App extends React.Component {
         .addTo(this.map);
     });
 
-    this.map.on('mouseleave', 'point', () => {
+    this.map.on('mouseleave', 'coordinates', () => {
       this.map.getCanvas().style.cursor = '';
       this.popup.remove();
     });
